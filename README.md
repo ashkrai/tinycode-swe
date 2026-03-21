@@ -1,1 +1,1 @@
-# tinycode-swe
+# SWE Skills — Project-Based Learning Path
