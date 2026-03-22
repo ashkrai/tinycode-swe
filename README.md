@@ -1,1 +1,0 @@
-# SWE Skills — Project-Based Learning Path
