@@ -1,0 +1,105 @@
+# =============================================================================
+# Go
+# =============================================================================
+
+# Compiled binaries and build output
+bin/
+dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary and coverage output
+*.test
+*.out
+coverage.html
+coverage.txt
+
+# Go workspace file (Go 1.18+)
+go.work
+go.work.sum
+
+# Dependency vendor directory (only ignore if you don't vendor)
+# vendor/
+
+# =============================================================================
+# Environment & Secrets — NEVER commit these
+# =============================================================================
+.env
+.env.*
+!.env.example
+
+# =============================================================================
+# Docker
+# =============================================================================
+# Local override compose files
+docker-compose.override.yml
+docker-compose.local.yml
+
+# =============================================================================
+# macOS
+# =============================================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# =============================================================================
+# Linux
+# =============================================================================
+*~
+.fuse_hidden*
+.nfs*
+
+# =============================================================================
+# Windows
+# =============================================================================
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# =============================================================================
+# Editors & IDEs
+# =============================================================================
+
+# VSCode
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# JetBrains / GoLand
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim / Neovim
+*.swp
+*.swo
+*.swn
+Session.vim
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+.#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# =============================================================================
+# Logs & temp files
+# =============================================================================
+*.log
+*.tmp
+*.temp
+tmp/
+temp/
