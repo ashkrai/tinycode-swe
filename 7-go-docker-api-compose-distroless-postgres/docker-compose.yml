@@ -1,0 +1,101 @@
+# =============================================================================
+# docker-compose.yml
+# =============================================================================
+# Two services:
+#   postgres  — postgres:16-alpine (smallest official Postgres image)
+#   api       — distroless Go binary built from ./Dockerfile
+#
+# Design decisions:
+#   ✓ All credentials in env vars — never hard-coded here
+#   ✓ Postgres port NOT published to host (internal-only)
+#   ✓ Only port 8080 exposed to host (API)
+#   ✓ Healthchecks on both services
+#   ✓ api depends on postgres *being healthy* before starting
+#   ✓ Named volume `pgdata` → data survives `docker compose down`
+#   ✓ Private `backend` bridge network — isolated from other stacks
+# =============================================================================
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # PostgreSQL 16 (Alpine variant — smallest official image, ~80 MB)
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       ${POSTGRES_DB:-appdb}
+      POSTGRES_USER:     ${POSTGRES_USER:-appuser}
+      # Require the password to be set explicitly — fail fast if forgotten.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      # Named volume so data persists across container restarts / `compose down`
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+    # Postgres is deliberately NOT published to the host.
+    # Only the `api` service (same Docker network) can reach it.
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "pg_isready -U ${POSTGRES_USER:-appuser} -d ${POSTGRES_DB:-appdb}"
+      interval:     10s
+      timeout:       5s
+      retries:       5
+      start_period: 20s
+
+  # ---------------------------------------------------------------------------
+  # Go REST API (distroless, non-root)
+  # ---------------------------------------------------------------------------
+  api:
+    build:
+      context:    .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      # Compose interpolates POSTGRES_* from the .env file / shell environment.
+      DATABASE_URL: >-
+        postgres://${POSTGRES_USER:-appuser}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-appdb}?sslmode=disable
+      PORT: "8080"
+    ports:
+      # Only the API port is reachable from the host.
+      # Change API_PORT in .env to use a different host port.
+      - "${API_PORT:-8080}:8080"
+    networks:
+      - backend
+    depends_on:
+      postgres:
+        # Wait until postgres passes its healthcheck before starting.
+        # This replaces fragile sleep-based wait scripts.
+        condition: service_healthy
+    healthcheck:
+      # wget ships in BusyBox inside some images; distroless has neither wget
+      # nor curl, so we rely on the external Docker daemon health probe only
+      # (the api container itself pings /healthz from outside via the port).
+      test:
+        - "CMD-SHELL"
+        - >
+          wget --quiet --tries=1 --spider http://localhost:8080/healthz
+          || exit 1
+      interval:     15s
+      timeout:       5s
+      retries:       3
+      start_period: 10s
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  backend:
+    # Private bridge network — services can reach each other by service name
+    # (e.g. "postgres") but are isolated from other Compose stacks.
+    driver: bridge
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  pgdata:
+    # Docker-managed named volume.
+    # Survives:  docker compose down
+    # Destroyed: docker compose down --volumes

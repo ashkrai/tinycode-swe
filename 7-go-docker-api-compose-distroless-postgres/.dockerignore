@@ -1,0 +1,27 @@
+# .dockerignore — keeps the build context lean and avoids leaking secrets
+
+# Version control
+.git
+.gitignore
+
+# Local env / secrets (NEVER send to Docker daemon)
+.env
+*.env
+
+# Editor artefacts
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build outputs (they'll be rebuilt inside Docker anyway)
+bin/
+dist/
+
+# Test artefacts
+**/*_test.go
+testdata/
+
+# Docs / misc
+*.md
+LICENSE
