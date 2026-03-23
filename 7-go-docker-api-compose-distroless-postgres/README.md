@@ -1,4 +1,4 @@
-# go-docker-api
+# 7. go-docker-api
 
 A production-ready **Go REST API** backed by **PostgreSQL**, fully Dockerised
 with a **multi-stage Dockerfile** (Alpine builder → distroless final image) and

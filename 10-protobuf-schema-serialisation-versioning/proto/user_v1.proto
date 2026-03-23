@@ -1,0 +1,57 @@
+syntax = "proto3";
+package user.v1;
+option go_package = "github.com/ashkrai/protobuf-user/internal/user;userpb";
+
+enum Role {
+  ROLE_UNSPECIFIED = 0;
+  ROLE_GUEST       = 1;
+  ROLE_MEMBER      = 2;
+  ROLE_ADMIN       = 3;
+  ROLE_SUPER_ADMIN = 4;
+}
+
+enum AccountStatus {
+  ACCOUNT_STATUS_UNSPECIFIED = 0;
+  ACCOUNT_STATUS_PENDING     = 1;
+  ACCOUNT_STATUS_ACTIVE      = 2;
+  ACCOUNT_STATUS_SUSPENDED   = 3;
+  ACCOUNT_STATUS_DELETED     = 4;
+}
+
+message Address {
+  string street  = 1;
+  string city    = 2;
+  string state   = 3;
+  string country = 4;
+  string zip     = 5;
+}
+
+message ContactInfo {
+  string          email        = 1;
+  string          phone        = 2;
+  repeated string social_links = 3;
+}
+
+message Preferences {
+  string language         = 1;
+  string timezone         = 2;
+  bool   email_newsletter = 3;
+  bool   dark_mode        = 4;
+}
+
+// User v1 — field numbers 1–13.
+message User {
+  string id         = 1;
+  string username   = 2;
+  string first_name = 3;
+  string last_name  = 4;
+  Role          role   = 5;
+  AccountStatus status = 6;
+  ContactInfo contact     = 7;
+  Address     address     = 8;
+  Preferences preferences = 9;
+  repeated string     group_ids = 10;
+  map<string, string> metadata  = 11;
+  int64 created_at_unix = 12;
+  int64 updated_at_unix = 13;
+}

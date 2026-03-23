@@ -1,4 +1,4 @@
-# 10-product-catalog-mongo
+# 9-product-catalog-mongo
 
 A production-style Go REST API for a **product catalog** backed by **MongoDB**.
 

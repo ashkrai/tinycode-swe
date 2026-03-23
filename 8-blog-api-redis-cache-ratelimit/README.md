@@ -1,4 +1,4 @@
-# blog-api
+# 8. blog-api
 
 A production-style Go REST API demonstrating:
 

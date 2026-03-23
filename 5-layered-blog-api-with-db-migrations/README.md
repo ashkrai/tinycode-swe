@@ -1,4 +1,4 @@
-# Blog API — PostgreSQL Schema Design in Go
+# 5. Blog API — PostgreSQL Schema Design in Go
 
 A complete, runnable Go REST API demonstrating:
 

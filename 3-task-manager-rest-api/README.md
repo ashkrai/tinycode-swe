@@ -1,3 +1,5 @@
+# 3. task-manager-rest-api
+
 # terminal 1 — start the server
 go mod tidy          # downloads the chi router
 go run main.go

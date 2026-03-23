@@ -1,3 +1,5 @@
+# 2. count-from-file-cli
+
 In Go (and Linux), **everything is a file** — an actual file on disk, a pipe from another program, keyboard input — they all look identical to your code. `bufio.Scanner` reads any of them the same way. You just decide *which* one to point it at.
 ```
 user gives a filename  →  open that file  →  point Scanner at it

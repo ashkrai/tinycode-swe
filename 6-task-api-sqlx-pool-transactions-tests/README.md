@@ -1,4 +1,4 @@
-# Task API — Go · PostgreSQL · sqlx · chi
+# 6. Task API — Go · PostgreSQL · sqlx · chi
 
 A production-ready REST API for task management.
 

@@ -1,3 +1,5 @@
+# 1. greeter-cli
+
 A CLI (Command Line Interface) is:
 👉 A program you run by typing commands in the terminal.
 
